@@ -18,16 +18,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <section className="w-1/2 mx-auto font-mono">
-          <nav className=" flex items-center justify-between my-10">
+        <section className="md:w-1/2 mx-auto font-mono px-4 md:px-0">
+          <nav className=" flex flex-row md:items-center justify-between my-5 md:my-10 border-b border-b-gray-600 pb-3">
             <Link href={"/"} className=" text-4xl font-bold uppercase">
               SimpleShare
             </Link>
             <Link
               href={"/posts/create"}
-              className=" text-white bg-black font-medium p-2 rounded-md"
+              className=" text-white bg-black font-medium py-1 px-3 rounded-md w-fit text-2xl"
             >
-              Create new post
+              +
             </Link>
           </nav>
           <div>{children}</div>
