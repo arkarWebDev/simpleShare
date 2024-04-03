@@ -1,38 +1,36 @@
-import { db } from "@/db";
-import { notFound, redirect } from "next/navigation";
+"use client";
+
+import { getOldPost, updatePost } from "@/actions";
+import { useEffect, useState } from "react";
+import { useFormState } from "react-dom";
 
 interface EditPageInterface {
   params: {
     id: string;
   };
 }
-export default async function EditPage(props: EditPageInterface) {
+export default function EditPage(props: EditPageInterface) {
+  const [oldPost, setOldPost] = useState<{
+    id: number;
+    title: string;
+    description: string;
+  } | null>(null);
+
   const id = parseInt(props.params.id);
 
-  const oldPost = await db.post.findFirst({
-    where: { id },
+  const [editFormState, editFormAction] = useFormState(updatePost, {
+    message: "",
+    id,
   });
 
-  if (!oldPost) {
-    return notFound();
-  }
-
-  const updatePost = async (formData: FormData) => {
-    "use server";
-
-    const title = formData.get("title") as string;
-    const description = formData.get("description") as string;
-
-    await db.post.update({
-      where: { id },
-      data: {
-        title,
-        description,
-      },
-    });
-
-    redirect("/");
+  const getOldData = async () => {
+    const post = await getOldPost(id);
+    setOldPost(post);
   };
+
+  useEffect(() => {
+    getOldData();
+  }, []);
 
   return (
     <section className=" mt-12 md:mt-28 md:w-1/2 mx-auto">
@@ -40,7 +38,12 @@ export default async function EditPage(props: EditPageInterface) {
       <p className=" text-center text-sm font-medium text-gray-600">
         update your post here.
       </p>
-      <form className="mt-6" action={updatePost}>
+      {editFormState.message && (
+        <p className="text-center bg-red-600 text-white py-1 mt-4">
+          {editFormState.message}
+        </p>
+      )}
+      <form className="mt-6" action={editFormAction}>
         <div className=" mb-4">
           <label htmlFor="title" className=" text-lg font-medium text-gray-600">
             Title

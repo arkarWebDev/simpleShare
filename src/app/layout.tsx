@@ -31,6 +31,11 @@ export default function RootLayout({
             </Link>
           </nav>
           <div>{children}</div>
+          <footer>
+            <p className=" my-20 text-center font-medium text-sm text-gray-500">
+              Copyright by @codehub.mm
+            </p>
+          </footer>
         </section>
       </body>
     </html>
